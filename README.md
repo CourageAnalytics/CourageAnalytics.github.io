@@ -5,7 +5,7 @@ Single-file HTML application.
 
 Main file:
 
-NCC_Match_Battles_Report.html
+NCBattlesDB.html
 
 Purpose:
 
