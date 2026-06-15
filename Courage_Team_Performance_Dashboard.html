@@ -500,6 +500,67 @@
   }
   .obv-radar-legend .leg-match::before  { background: var(--courage-red); }
   .obv-radar-legend .leg-season::before { background: var(--courage-navy); opacity: 0.45; }
+  .obv-radar-legend .leg-ncc::before    { background: var(--courage-red); }
+  .obv-radar-legend .leg-opp::before    { background: var(--courage-navy); opacity: 0.7; }
+
+  /* ── COMBINED OBV HEAD-TO-HEAD TABLE ────────────────────────────────────── */
+  .obv-h2h-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--bg-card);
+    font-family: 'Inter', sans-serif;
+    table-layout: fixed;
+  }
+  .obv-h2h-table thead tr {
+    background: var(--bg-surface);
+    border-bottom: 2px solid var(--border-strong);
+  }
+  .obv-h2h-table th {
+    padding: 9px 10px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    text-align: center;
+  }
+  .obv-h2h-table th.ncc-side { color: var(--courage-red); }
+  .obv-h2h-table th.opp-side { color: var(--courage-navy); }
+  .obv-h2h-table tbody tr {
+    border-bottom: 1px solid var(--border-soft);
+    transition: background 120ms;
+  }
+  .obv-h2h-table tbody tr:last-child { border-bottom: none; }
+  .obv-h2h-table tbody tr:hover { background: var(--bg-surface); }
+  .obv-h2h-table td {
+    padding: 10px 8px;
+    font-size: 13px;
+    vertical-align: middle;
+  }
+  .obv-h2h-table td.h2h-metric {
+    text-align: center;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--text-primary);
+    letter-spacing: 0.02em;
+    border-left: 1px solid var(--border-soft);
+    border-right: 1px solid var(--border-soft);
+    background: var(--bg-surface);
+  }
+  .obv-h2h-table td.h2h-val {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--text-primary);
+  }
+  .obv-h2h-table td.h2h-val.ncc { text-align: right; padding-right: 14px; }
+  .obv-h2h-table td.h2h-val.opp { text-align: left;  padding-left:  14px; }
+  .obv-h2h-table td.h2h-val.empty { color: var(--text-muted); font-weight: 400; font-size: 13px; }
+  .obv-h2h-table td.h2h-grade { text-align: center; }
+  .obv-h2h-table td.h2h-spark { padding: 6px 10px; }
+  .obv-h2h-table td.h2h-spark.ncc { text-align: right; }
+  .obv-h2h-table td.h2h-spark.opp { text-align: left; }
 
   /* EMPTY SUBTAB */
   .empty-state {
@@ -2256,91 +2317,46 @@
   <!-- ON-BALL VALUE TAB -->
   <div class="subtab-content" id="tab-obv">
 
-    <!-- OBV Radar Charts -->
+    <!-- Combined OBV Radar — NCC vs Opposition on shared axes -->
     <div class="obv-radar-row">
-      <div class="obv-radar-card">
-        <div class="obv-radar-card-title">NCC On-Ball Value</div>
-        <svg id="obv-radar-ncc" width="100%" viewBox="0 0 320 260" xmlns="http://www.w3.org/2000/svg"></svg>
+      <div class="obv-radar-card" style="max-width:540px;">
+        <div class="obv-radar-card-title">On-Ball Value — NCC vs Opposition</div>
+        <svg id="obv-radar-combined" width="100%" viewBox="0 0 380 320" xmlns="http://www.w3.org/2000/svg"></svg>
         <div class="obv-radar-legend">
-          <span class="leg-match">Selected match</span>
-          <span class="leg-season">Season avg</span>
+          <span class="leg-ncc">NC Courage</span>
+          <span class="leg-opp">Opposition</span>
         </div>
-      </div>
-      <div class="obv-radar-card">
-        <div class="obv-radar-card-title">Opposition On-Ball Value</div>
-        <svg id="obv-radar-opp" width="100%" viewBox="0 0 320 260" xmlns="http://www.w3.org/2000/svg"></svg>
-        <div class="obv-radar-legend">
-          <span class="leg-match">Selected match</span>
-          <span class="leg-season">Season avg</span>
+        <div class="obv-radar-legend" style="margin-top:4px;font-size:10px;font-style:italic;">
+          <span style="display:inline;">Shaded gap shows the per-axis differential — wider shade = bigger lead. Numbers beside each axis show NCC − Opp.</span>
         </div>
       </div>
     </div>
 
-    <!-- NCC On-Ball Value -->
+    <!-- Head-to-head OBV table — NCC left, metric centre, Opp right -->
     <div class="table-section">
       <div class="section-header">
         <span class="section-tag">On-Ball Value</span>
-        <span class="section-title">NCC OBV</span>
+        <span class="section-title">NCC vs Opposition — Head-to-Head</span>
       </div>
-      <div class="table-section-title">How much value NCC actions added per match (StatsBomb OBV model)</div>
-      <table class="metrics-table">
+      <div class="table-section-title">How much value each side's actions added per match (StatsBomb OBV model). Higher is better for the team in question.</div>
+      <table class="obv-h2h-table">
         <colgroup>
-          <col class="c-metric">
-          <col class="c-val">
-          <col class="c-grade">
-          <col class="c-ravg">
-          <col class="c-rgrade">
-          <col class="c-stat">
-          <col class="c-stat">
-          <col class="c-stat">
+          <col style="width:14%"><col style="width:22%">
+          <col style="width:28%">
+          <col style="width:22%"><col style="width:14%">
         </colgroup>
         <thead>
           <tr>
+            <th class="ncc-side">Grade</th>
+            <th class="ncc-side">NCC Value</th>
             <th>Metric</th>
-            <th>Trend</th>
-            <th>Season Worst</th>
-            <th>Match Value</th>
-            <th>Season Best</th>
-            <th>Match Grade</th>
-            <th title="Grades rolling 3-match average vs season mean — shows whether recent form is above or below your season baseline">3-Match Form</th>
+            <th class="opp-side">Opp Value</th>
+            <th class="opp-side">Grade</th>
           </tr>
         </thead>
-        <tbody id="obv-ncc-rows"></tbody>
+        <tbody id="obv-h2h-rows"></tbody>
       </table>
-    </div>
-
-    <!-- Opposition On-Ball Value -->
-    <div class="table-section">
-      <div class="section-header" style="margin-top:8px;">
-        <span class="section-tag">On-Ball Value</span>
-        <span class="section-title">Opposition OBV</span>
-      </div>
-      <div class="table-section-title">How much value opposition actions added — lower is better for NCC</div>
-      <table class="metrics-table">
-        <colgroup>
-          <col class="c-metric">
-          <col class="c-val">
-          <col class="c-grade">
-          <col class="c-ravg">
-          <col class="c-rgrade">
-          <col class="c-stat">
-          <col class="c-stat">
-          <col class="c-stat">
-        </colgroup>
-        <thead>
-          <tr>
-            <th>Metric</th>
-            <th>Trend</th>
-            <th>Season Worst</th>
-            <th>Match Value</th>
-            <th>Season Best</th>
-            <th>Match Grade</th>
-            <th title="Grades rolling 3-match average vs season mean — shows whether recent form is above or below your season baseline">3-Match Form</th>
-          </tr>
-        </thead>
-        <tbody id="obv-opp-rows"></tbody>
-      </table>
-      <p class="data-source-note">Source: StatsBomb — OBV (On-Ball Value) measures the probability change in scoring/conceding caused by each action. Values can be negative.</p>
+      <p class="data-source-note">Source: StatsBomb — OBV (On-Ball Value) measures the probability change in scoring/conceding caused by each action. Values can be negative. Grades are scored independently per side (NCC: higher = better; Opp: lower = better from NCC's perspective).</p>
     </div>
   </div>
 
@@ -2362,122 +2378,111 @@ const MATCHES = [
   { label: 'GW6 · M7', date: 'May 2', opp: 'KC Current', loc: 'Home', result: 'L 1-2' },
   { label: 'GW7 · M8', date: 'May 8', opp: 'Orlando Pride', loc: 'Away', result: 'L 0-1' },
   { label: 'GW8 · M9', date: 'May 16', opp: 'Chicago Red Stars', loc: 'Home', result: 'W 4-0' },
-  { label: 'GW9 · M10', date: 'May 24', opp: 'Racing Louisville FC', loc: 'Away', result: 'W 2-1' }
+  { label: 'GW9 · M10', date: 'May 24', opp: 'Racing Louisville FC', loc: 'Away', result: 'W 2-1' },
+  { label: 'GW10 · M11', date: 'May 31', opp: 'Angel City', loc: 'Away', result: 'W 2-1' }
 ];
 
 const DATA = {
   sop: {
     progression: [
-      { id:'Z2_att', label:'Zone 2 Attempts', vals:[46,69,53,53,49,55,53,44,56,61], higherBetter:true },
-      { id:'Z2_comp', label:'Zone 2 Completions', vals:[36,47,37,36,46,36,38,36,49,42], higherBetter:true },
-      { id:'Z2_pct', label:'Zone 2 Completion %', vals:[0.7826,0.6812,0.6981,0.6792,0.9388,0.6545,0.717,0.8182,0.875,0.6885], higherBetter:true, pct:true, dec:3 },
-      { id:'Z2_pts', label:'Zone 2 Points', vals:[36,48,37,36,46,36,38,36,49,42], higherBetter:true },
-      { id:'Z3_att', label:'Zone 3 Attempts', vals:[20,26,24,21,20,25,7,11,41,21], higherBetter:true },
-      { id:'Z3_comp', label:'Zone 3 Completions', vals:[12,8,4,11,11,7,6,7,22,9], higherBetter:true },
-      { id:'Z3_pct', label:'Zone 3 Completion %', vals:[0.6,0.3077,0.1667,0.5238,0.55,0.28,0.8571,0.6364,0.5366,0.4286], higherBetter:true, pct:true, dec:3 },
-      { id:'Z3_pts', label:'Zone 3 Points', vals:[24,16,8,22,22,14,12,14,44,18], higherBetter:true }
+      { id:'Z2_att', label:'Zone 2 Attempts', vals:[46,69,53,53,49,55,53,44,56,61,38], higherBetter:true },
+      { id:'Z2_comp', label:'Zone 2 Completions', vals:[36,47,37,36,46,36,38,36,49,42,22], higherBetter:true },
+      { id:'Z2_pct', label:'Zone 2 Completion %', vals:[0.7826,0.6812,0.6981,0.6792,0.9388,0.6545,0.717,0.8182,0.875,0.6885,0.5789], higherBetter:true, pct:true, dec:3 },
+      { id:'Z3_att', label:'Zone 3 Attempts', vals:[20,26,24,21,20,25,7,11,41,21,16], higherBetter:true },
+      { id:'Z3_comp', label:'Zone 3 Completions', vals:[12,8,4,11,11,7,6,7,22,9,6], higherBetter:true },
+      { id:'Z3_pct', label:'Zone 3 Completion %', vals:[0.6,0.3077,0.1667,0.5238,0.55,0.28,0.8571,0.6364,0.5366,0.4286,0.375], higherBetter:true, pct:true, dec:3 }
     ],
     finishing: [
-      { id:'PZ_att', label:'Pass Zone Attempts', vals:[15,12,15,17,14,22,18,16,18,12], higherBetter:true },
-      { id:'PZ_comp', label:'Pass Zone Completions', vals:[13,11,11,17,11,13,11,8,13,7], higherBetter:true },
-      { id:'PZ_pct', label:'Pass Zone Completion %', vals:[0.8667,0.9167,0.7333,1.0,0.7857,0.5909,0.6111,0.5,0.7222,0.5833], higherBetter:true, pct:true, dec:3 },
-      { id:'PZ_pts', label:'Pass Zone Points', vals:[39,33,33,51,33,39,33,24,39,21], higherBetter:true },
-      { id:'SZ_att', label:'Shoot Zone Attempts', vals:[19,16,16,22,14,16,30,17,23,22], higherBetter:true },
-      { id:'SZ_comp', label:'Shoot Zone Completions', vals:[5,5,4,7,3,1,5,3,11,9], higherBetter:true },
-      { id:'SZ_pct', label:'Shoot Zone Completion %', vals:[0.2632,0.3125,0.25,0.3182,0.2143,0.0625,0.1667,0.1765,0.4783,0.4091], higherBetter:true, pct:true, dec:3 },
-      { id:'SZ_pts', label:'Shoot Zone Points', vals:[25,25,20,35,15,5,25,15,55,45], higherBetter:true }
+      { id:'PZ_att', label:'Pass Zone Attempts', vals:[15,12,15,17,14,22,18,16,18,12,6], higherBetter:true },
+      { id:'PZ_comp', label:'Pass Zone Completions', vals:[13,11,11,17,11,13,11,8,13,7,2], higherBetter:true },
+      { id:'PZ_pct', label:'Pass Zone Completion %', vals:[0.8667,0.9167,0.7333,1.0,0.7857,0.5909,0.6111,0.5,0.7222,0.5833,0.3333], higherBetter:true, pct:true, dec:3 },
+      { id:'SZ_att', label:'Shoot Zone Attempts', vals:[19,16,16,22,14,16,30,17,23,22,16], higherBetter:true },
+      { id:'SZ_comp', label:'Shoot Zone Completions', vals:[5,5,4,7,3,1,5,3,11,9,4], higherBetter:true },
+      { id:'SZ_pct', label:'Shoot Zone Completion %', vals:[0.2632,0.3125,0.25,0.3182,0.2143,0.0625,0.1667,0.1765,0.4783,0.4091,0.25], higherBetter:true, pct:true, dec:3 }
     ]
   },
   packing: {
     volume: [
-      { id:'byp_opp', label:'Bypassed Opponents', vals:[445,378,363,358,371,320,377,335,457,417], higherBetter:true },
-      { id:'byp_def', label:'Bypassed Defenders', vals:[71,49,43,40,48,40,68,35,66,67], higherBetter:true },
-      { id:'bw_opp', label:'Ball Win Removed Opponents', vals:[194,195,194,174,213,194,254,121,174,165], higherBetter:true },
-      { id:'bw_def', label:'Ball Win Removed Defenders', vals:[10,12,7,4,7,15,14,3,12,9], higherBetter:true },
-      { id:'crit_loss', label:'Critical Ball Loss', vals:[13,9,15,21,10,11,8,9,16,6], higherBetter:false, context:'neg' },
-      { id:'bl_team', label:'Ball Loss Removed Teammates', vals:[196,129,176,167,149,138,128,119,140,128], higherBetter:false, context:'neg' },
-      { id:'deep_prog', label:'Final 3rd Entries', vals:[43,35,39,43,54,53,66,51,49,33], higherBetter:true }
+      { id:'byp_opp', label:'Bypassed Opponents', vals:[445,378,363,358,371,320,377,335,457,417,334], higherBetter:true },
+      { id:'byp_def', label:'Bypassed Defenders', vals:[71,49,43,40,48,40,68,35,66,67,44], higherBetter:true },
+      { id:'bw_opp', label:'Ball Win Removed Opponents', vals:[194,195,194,174,213,194,254,121,174,165,153], higherBetter:true },
+      { id:'bw_def', label:'Ball Win Removed Defenders (PA)', vals:[13.2,10.2,7.0,4.9,6.7,15.3,16.7,3.5,12.5,9.6,7.7], higherBetter:true, dec:1 },
+      { id:'crit_loss', label:'Critical Ball Loss', vals:[13,9,15,21,10,11,8,9,16,6,16], higherBetter:false, context:'neg' },
+      { id:'bl_team', label:'Ball Loss Removed Teammates', vals:[196,129,176,167,149,138,128,119,140,128,174], higherBetter:false, context:'neg' },
+      { id:'deep_prog', label:'Final 3rd Entries', vals:[43,35,39,43,54,53,66,51,49,33,36], higherBetter:true }
     ],
     linebreak: [
-      { id:'thru', label:'Through Passes', vals:[0,1,0,0,1,0,2,2,3,0], higherBetter:true },
-      { id:'lb_f3', label:'LB Passes in Final Third', vals:[26,23,23,30,25,28,51,37,19,24], higherBetter:true },
-      { id:'lb_comp_f3', label:'LB Passes Completed in Final Third', vals:[16,11,7,16,8,9,17,16,9,10], higherBetter:true },
-      { id:'lb_pct_f3', label:'LB Completion % (Final Third)', vals:[0.6153,0.4782,0.3043,0.5333,0.32,0.3214,0.3333,0.4324,0.4736,0.4166], higherBetter:true, pct:true, dec:3 },
-      { id:'lb_obv_f3', label:'LB Passes OBV (Final Third)', vals:[0.351,0.319,0.248,0.583,0.11,0.362,0.264,0.143,0.302,0.197], higherBetter:true, dec:3 }
+      { id:'lb_comp_f3', label:'LB Passes Completed in Final Third', vals:[16,11,7,16,8,9,17,16,9,10,11], higherBetter:true },
+      { id:'lb_pct_f3', label:'LB Completion % (Final Third)', vals:[0.6153,0.4782,0.3043,0.5333,0.32,0.3214,0.3333,0.4324,0.4736,0.4166,0.4782], higherBetter:true, pct:true, dec:3 },
+      { id:'lb_obv_f3', label:'LB Passes OBV (Final Third)', vals:[0.351,0.319,0.248,0.583,0.11,0.362,0.264,0.143,0.302,0.197,0.243], higherBetter:true, dec:3 }
     ]
   },
   boxdom: {
     penetration: [
-      { id:'bea', label:'Box Entries Attempted', vals:[35,30,35,39,36,44,70,36,38,31], higherBetter:true },
-      { id:'bea_cp', label:'Box Entries Attempted (Cross&Pass)', vals:[28,23,31,34,29,37,60,31,26,24], higherBetter:true },
-      { id:'bea_carry', label:'Box Entries Attempted (Carry)', vals:[7,7,4,5,7,7,10,5,12,7], higherBetter:true },
-      { id:'sbe', label:'Successful Box Entries', vals:[22,17,14,25,18,23,29,17,27,17], higherBetter:true },
-      { id:'tib', label:'Touches in Box', vals:[41,32,35,54,36,54,55,30,59,39], higherBetter:true }
+      { id:'bea_cp', label:'Box Entries Attempted (Cross&Pass)', vals:[28,23,31,34,29,37,60,31,26,24,27], higherBetter:true },
+      { id:'bea_carry', label:'Box Entries Attempted (Carry)', vals:[7,7,4,5,7,7,10,5,12,7,2], higherBetter:true },
+      { id:'sbe', label:'Successful Box Entries', vals:[22,17,14,25,18,23,29,17,27,17,7], higherBetter:true },
+      { id:'tib', label:'Touches in Box', vals:[41,32,35,54,36,54,55,30,59,39,17], higherBetter:true }
     ],
     finishing: [
-      { id:'xg', label:'Total xG', vals:[1.388,1.324,1.608,1.086,1.517,1.854,1.935,0.78,2.217,1.234], higherBetter:true, dec:3 },
-      { id:'spxg', label:'Set Piece xG', vals:[0.031,0.348,0.445,0.354,0.203,1.26,0.167,0.231,0.409,0.114], higherBetter:true, dec:3 },
-      { id:'shots', label:'Shots', vals:[15,14,13,11,16,21,16,12,17,11], higherBetter:true },
-      { id:'xgps', label:'xG/Shot', vals:[0.092,0.095,0.124,0.099,0.095,0.088,0.121,0.065,0.13,0.112], higherBetter:true, dec:3 },
-      { id:'psxg', label:'Post-Shot xG', vals:[2.36,0.65,1.1,1.44,2.36,2.18,1.76,0.01,2.83,1.79], higherBetter:true, dec:2 },
-      { id:'qc', label:'Quality Chances', vals:[1,2,4,1,1,1,0,0,3,1], higherBetter:true },
-      { id:'bc', label:'Big Chances', vals:[1,1,1,1,1,1,2,0,2,1], higherBetter:true }
+      { id:'xg', label:'Total xG', vals:[1.388,1.324,1.608,1.086,1.517,1.854,1.935,0.78,2.217,1.234,1.283], higherBetter:true, dec:3 },
+      { id:'spxg', label:'Set Piece xG', vals:[0.031,0.348,0.445,0.354,0.203,1.26,0.167,0.231,0.409,0.114,0.19], higherBetter:true, dec:3 },
+      { id:'shots', label:'Shots', vals:[15,14,13,11,16,21,16,12,17,11,10], higherBetter:true },
+      { id:'xgps', label:'xG/Shot', vals:[0.092,0.095,0.124,0.099,0.095,0.088,0.121,0.065,0.13,0.112,0.128], higherBetter:true, dec:3 },
+      { id:'psxg', label:'Post-Shot xG', vals:[2.36,0.65,1.1,1.44,2.36,2.18,1.76,0.01,2.83,1.79,1.78], higherBetter:true, dec:2 },
+      { id:'qc', label:'Quality Chances', vals:[1,2,4,1,1,1,0,0,3,1,0], higherBetter:true },
+      { id:'bc', label:'Big Chances', vals:[1,1,1,1,1,1,2,0,2,1,2], higherBetter:true }
     ]
   },
   boxres: {
     denying: [
-      { id:'opp_bea', label:'Opp. Box Entries Attempted', vals:[38,32,32,44,57,27,25,27,22,33], higherBetter:false, context:'opp' },
-      { id:'opp_bea_cp', label:'Opp. Box Entries Attempted (Cross&Pass)', vals:[28,29,26,35,41,22,20,17,17,28], higherBetter:false, context:'opp' },
-      { id:'opp_bea_carry', label:'Opp. Box Entries Attempted (Carry)', vals:[10,3,6,9,16,5,5,10,5,5], higherBetter:false, context:'opp' },
-      { id:'opp_sbe', label:'Opp. Successful Box Entries', vals:[20,17,19,28,35,14,14,17,7,17], higherBetter:false, context:'opp' },
-      { id:'opp_tib', label:'Opp. Touches in Box', vals:[42,30,29,41,54,23,33,20,26,46], higherBetter:false, context:'opp' }
+      { id:'opp_bea_cp', label:'Opp. Box Entries Attempted (Cross&Pass)', vals:[28,29,26,35,41,22,20,17,17,28,31], higherBetter:false, context:'opp' },
+      { id:'opp_bea_carry', label:'Opp. Box Entries Attempted (Carry)', vals:[10,3,6,9,16,5,5,10,5,5,12], higherBetter:false, context:'opp' },
+      { id:'opp_sbe', label:'Opp. Successful Box Entries', vals:[20,17,19,28,35,14,14,17,7,17,28], higherBetter:false, context:'opp' },
+      { id:'opp_tib', label:'Opp. Touches in Box', vals:[42,30,29,41,54,23,33,20,26,46,45], higherBetter:false, context:'opp' }
     ],
     nullifying: [
-      { id:'opp_xg', label:'Opp. Total xG', vals:[1.909,0.653,1.045,1.487,1.382,0.781,2.176,0.445,0.944,1.29], higherBetter:false, dec:3, context:'opp' },
-      { id:'opp_spxg', label:'Opp. Set Piece xG', vals:[0.175,0.104,0.215,0.173,0.645,0.106,0.184,0.198,0.302,0.597], higherBetter:false, dec:3, context:'opp' },
-      { id:'opp_shots', label:'Opp. Shots', vals:[17,10,14,16,16,7,11,9,13,17], higherBetter:false, context:'opp' },
-      { id:'opp_xgps', label:'Opp. xG/Shot', vals:[0.112,0.065,0.075,0.093,0.086,0.112,0.198,0.049,0.073,0.076], higherBetter:false, dec:3, context:'opp' },
-      { id:'opp_psxg', label:'Opp. Post-Shot xG', vals:[1.49,0.39,2.32,2.11,0.12,1.61,1.36,1.07,0.95,0.94], higherBetter:false, dec:2, context:'opp' },
-      { id:'opp_qc', label:'Opp. Quality Chances', vals:[2,1,3,3,1,1,0,0,1,2], higherBetter:false, context:'opp' },
-      { id:'opp_bc', label:'Opp. Big Chances', vals:[1,0,0,1,1,1,3,0,1,0], higherBetter:false, context:'opp' }
+      { id:'opp_xg', label:'Opp. Total xG', vals:[1.909,0.653,1.045,1.487,1.382,0.781,2.176,0.445,0.944,1.29,1.604], higherBetter:false, dec:3, context:'opp' },
+      { id:'opp_spxg', label:'Opp. Set Piece xG', vals:[0.175,0.104,0.215,0.173,0.645,0.106,0.184,0.198,0.302,0.597,0.451], higherBetter:false, dec:3, context:'opp' },
+      { id:'opp_shots', label:'Opp. Shots', vals:[17,10,14,16,16,7,11,9,13,17,17], higherBetter:false, context:'opp' },
+      { id:'opp_xgps', label:'Opp. xG/Shot', vals:[0.112,0.065,0.075,0.093,0.086,0.112,0.198,0.049,0.073,0.076,0.094], higherBetter:false, dec:3, context:'opp' },
+      { id:'opp_psxg', label:'Opp. Post-Shot xG', vals:[1.49,0.39,2.32,2.11,0.12,1.61,1.36,1.07,0.95,0.94,2.56], higherBetter:false, dec:2, context:'opp' },
+      { id:'opp_qc', label:'Opp. Quality Chances', vals:[2,1,3,3,1,1,0,0,1,2,3], higherBetter:false, context:'opp' },
+      { id:'opp_bc', label:'Opp. Big Chances', vals:[1,0,0,1,1,1,3,0,1,0,1], higherBetter:false, context:'opp' }
     ]
   },
   defint: {
     volume: [
-      { id:'pressures', label:'Pressures (PA)', vals:[217.1,217.8,254.0,175.6,179.8,246.9,110.7,133.7,139.6,168.1], higherBetter:true, dec:1 },
-      { id:'cp', label:'Counterpressures (PA)', vals:[97.4,59.3,87.0,74.4,52.9,70.4,34.5,44.2,44.8,67.0], higherBetter:true, dec:1 },
-      { id:'agg_actions', label:'Aggressive Actions (PA)', vals:[80.3,122.9,129.0,91.5,97.1,123.5,64.3,68.6,52.1,72.3], higherBetter:true, dec:1 },
-      { id:'tack_int', label:'Tackles + Interceptions (PA)', vals:[36.8,32.2,36.0,24.4,31.7,30.6,26.2,23.3,28.1,37.2], higherBetter:true, dec:1 }
+      { id:'pressures', label:'Pressures (PA)', vals:[217.1,217.8,254.0,175.6,179.8,246.9,110.7,133.7,139.6,168.1,96.2], higherBetter:true, dec:1 },
+      { id:'cp', label:'Counterpressures (PA)', vals:[97.4,59.3,87.0,74.4,52.9,70.4,34.5,44.2,44.8,67.0,40.4], higherBetter:true, dec:1 },
+      { id:'agg_actions', label:'Aggressive Actions (PA)', vals:[80.3,122.9,129.0,91.5,97.1,123.5,64.3,68.6,52.1,72.3,56.7], higherBetter:true, dec:1 },
+      { id:'tack_int', label:'Tackles + Interceptions (PA)', vals:[36.8,32.2,36.0,24.4,31.7,30.6,26.2,23.3,28.1,37.2,22.1], higherBetter:true, dec:1 }
     ],
     forward: [
-      { id:'def_dist', label:'Defensive Action Distance', vals:[48.2,55.4,61.9,54.9,47.2,64.9,62.1,55.3,60.8,53.5], higherBetter:true, dec:1 },
-      { id:'press_def3', label:'Opp. Pressured Passes in Def. Third (PA)', vals:[27.6,41.5,43.0,40.2,20.2,68.4,17.9,25.6,41.7,21.3], higherBetter:true, dec:1 },
-      { id:'press_oh', label:'Pressures in Opp. Half (PA)', vals:[84.2,99.2,147.0,86.6,66.3,151.0,69.0,74.4,91.7,80.9], higherBetter:true, dec:1 },
-      { id:'press_oh_pct', label:'Pressures in Opp. Half %', vals:[0.3878,0.4552,0.5787,0.493,0.3689,0.6115,0.6236,0.5565,0.6567,0.481], higherBetter:true, pct:true, dec:3 },
-      { id:'cp_oh', label:'Counterpressures in Opp. Half (PA)', vals:[55.3,28.8,66.0,42.7,28.8,54.1,26.2,33.7,26.0,50.0], higherBetter:true, dec:1 }
+      { id:'press_oh', label:'Pressures in Opp. Half (PA)', vals:[84.2,99.2,147.0,86.6,66.3,151.0,69.0,74.4,91.7,80.9,49.0], higherBetter:true, dec:1 },
+      { id:'press_oh_pct', label:'Pressures in Opp. Half %', vals:[0.3878,0.4552,0.5787,0.493,0.3689,0.6115,0.6236,0.5565,0.6567,0.481,0.51], higherBetter:true, pct:true, dec:3 },
+      { id:'cp_oh', label:'Counterpressures in Opp. Half (PA)', vals:[55.3,28.8,66.0,42.7,28.8,54.1,26.2,33.7,26.0,50.0,26.0], higherBetter:true, dec:1 }
     ],
     progallowed: [
-      { id:'opp_dp', label:'Opp. Final 3rd Entries', vals:[27,56,37,26,55,18,29,31,31,36], higherBetter:false, context:'opp' },
-      { id:'opp_thru', label:'Opp. Through Passes', vals:[1,1,0,0,2,6,2,1,3,0], higherBetter:false, context:'opp' },
-      { id:'opp_lb_f3', label:'Opp. LB Passes in Final Third', vals:[16,21,24,23,36,19,15,11,14,25], higherBetter:false, context:'opp' },
-      { id:'opp_lb_comp_f3', label:'Opp. LB Completed (Final Third)', vals:[6,9,9,13,21,12,8,4,4,8], higherBetter:false, context:'opp' },
-      { id:'opp_lb_pct', label:'Opp. LB Completion % (F3)', vals:[0.375,0.4285,0.375,0.5652,0.5833,0.6315,0.5333,0.3636,0.2857,0.32], higherBetter:false, pct:true, dec:3, context:'opp' }
+      { id:'opp_dp', label:'Opp. Final 3rd Entries', vals:[27,56,37,26,55,18,29,31,31,36,35], higherBetter:false, context:'opp' },
+      { id:'opp_lb_comp_f3', label:'Opp. LB Completed (Final Third)', vals:[6,9,9,13,21,12,8,4,4,8,9], higherBetter:false, context:'opp' },
+      { id:'opp_lb_pct', label:'Opp. LB Completion % (F3)', vals:[0.375,0.4285,0.375,0.5652,0.5833,0.6315,0.5333,0.3636,0.2857,0.32,0.5625], higherBetter:false, pct:true, dec:3, context:'opp' }
     ]
   },
   obv: {
     ncc: [
-      { id:'obv_total', label:'Total OBV', vals:[4.154,1.022,0.858,0.791,3.706,1.815,1.096,1.172,3.559,2.459], higherBetter:true, dec:3 },
-      { id:'obv_pass', label:'Pass OBV', vals:[0.426,0.217,1.06,0.683,0.621,0.76,0.996,0.339,1.354,0.681], higherBetter:true, dec:3 },
-      { id:'obv_shot', label:'Shot OBV', vals:[0.243,-1.171,-0.338,-0.513,0.229,0.183,-1.009,-0.719,-0.101,0.586], higherBetter:true, dec:3 },
-      { id:'obv_dribble', label:'Dribble & Carry OBV', vals:[1.546,1.026,0.714,0.827,1.59,1.085,1.659,0.893,0.992,0.64], higherBetter:true, dec:3 },
-      { id:'obv_def', label:'Defensive Action OBV', vals:[0.673,0.49,0.402,0.187,0.947,0.068,0.253,0.462,0.28,0.855], higherBetter:true, dec:3 }
+      { id:'obv_total', label:'Total OBV', vals:[4.154,1.022,0.858,0.791,3.706,1.815,1.096,1.172,3.559,2.459,3.761], higherBetter:true, dec:3 },
+      { id:'obv_pass', label:'Pass OBV', vals:[0.426,0.217,1.06,0.683,0.621,0.76,0.996,0.339,1.354,0.681,0.471], higherBetter:true, dec:3 },
+      { id:'obv_shot', label:'Shot OBV', vals:[0.243,-1.171,-0.338,-0.513,0.229,0.183,-1.009,-0.719,-0.101,0.586,0.508], higherBetter:true, dec:3 },
+      { id:'obv_dribble', label:'Dribble & Carry OBV', vals:[1.546,1.026,0.714,0.827,1.59,1.085,1.659,0.893,0.992,0.64,0.763], higherBetter:true, dec:3 },
+      { id:'obv_def', label:'Defensive Action OBV', vals:[0.673,0.49,0.402,0.187,0.947,0.068,0.253,0.462,0.28,0.855,0.467], higherBetter:true, dec:3 }
     ],
     opp: [
-      { id:'opp_obv_total', label:'Opp. Total OBV', vals:[2.917,1.771,2.852,1.979,1.693,1.712,2.247,1.551,0.983,1.764], higherBetter:false, dec:3, context:'opp' },
-      { id:'opp_obv_pass', label:'Opp. Pass OBV', vals:[0.984,-0.063,0.576,0.233,1.54,0.421,0.596,0.743,0.62,0.862], higherBetter:false, dec:3, context:'opp' },
-      { id:'opp_obv_shot', label:'Opp. Shot OBV', vals:[-0.508,-0.296,0.501,0.997,-1.486,0.132,-0.292,-0.249,0.163,-0.671], higherBetter:false, dec:3, context:'opp' },
-      { id:'opp_obv_dribble', label:'Opp. Dribble & Carry OBV', vals:[1.082,1.147,1.212,0.809,0.368,0.635,1.254,0.374,0.893,1.305], higherBetter:false, dec:3, context:'opp' },
-      { id:'opp_obv_def', label:'Opp. Defensive Action OBV', vals:[0.14,0.395,0.665,0.615,0.139,0.964,-0.151,0.506,0.375,0.481], higherBetter:false, dec:3, context:'opp' }
+      { id:'opp_obv_total', label:'Opp. Total OBV', vals:[2.917,1.771,2.852,1.979,1.693,1.712,2.247,1.551,0.983,1.764,1.991], higherBetter:false, dec:3, context:'opp' },
+      { id:'opp_obv_pass', label:'Opp. Pass OBV', vals:[0.984,-0.063,0.576,0.233,1.54,0.421,0.596,0.743,0.62,0.862,1.262], higherBetter:false, dec:3, context:'opp' },
+      { id:'opp_obv_shot', label:'Opp. Shot OBV', vals:[-0.508,-0.296,0.501,0.997,-1.486,0.132,-0.292,-0.249,0.163,-0.671,-0.125], higherBetter:false, dec:3, context:'opp' },
+      { id:'opp_obv_dribble', label:'Opp. Dribble & Carry OBV', vals:[1.082,1.147,1.212,0.809,0.368,0.635,1.254,0.374,0.893,1.305,0.9], higherBetter:false, dec:3, context:'opp' },
+      { id:'opp_obv_def', label:'Opp. Defensive Action OBV', vals:[0.14,0.395,0.665,0.615,0.139,0.964,-0.151,0.506,0.375,0.481,0.238], higherBetter:false, dec:3, context:'opp' }
     ]
   }
 };
@@ -2706,7 +2711,7 @@ const HEATMAP_METRICS = [
   { id:'Z3_pct',        sectionKey:'sop'     },
   { id:'SZ_comp',       sectionKey:'sop'     },
   { id:'prog_passes',   sectionKey:'packing' },
-  { id:'lb_f3',         sectionKey:'packing' },
+  { id:'lb_comp_f3',    sectionKey:'packing' },
   { id:'tib',           sectionKey:'box-dom' },
   { id:'xg',            sectionKey:'box-dom' },
   { id:'opp_tib',       sectionKey:'box-res' },
@@ -2714,7 +2719,7 @@ const HEATMAP_METRICS = [
   { id:'ncc_gsaa',      sectionKey:'box-res' },
   { id:'pressures',     sectionKey:'def-int' },
   { id:'aggression',    sectionKey:'def-int' },
-  { id:'def_dist',      sectionKey:'def-int' },
+  { id:'cp_oh',         sectionKey:'def-int' },
   { id:'tack_int',      sectionKey:'def-int' },
 ];
 
@@ -2913,140 +2918,249 @@ function exitInsightsView() {
 }
 
 
-// ── OBV RADAR CHART RENDERER ─────────────────────────────────────────────────
+// ── OBV RADAR CHART RENDERER (combined NCC vs Opposition) ────────────────────
 function renderOBVRadars() {
+  const svg = document.getElementById('obv-radar-combined');
+  if (!svg) return;
+
   const isSeason = currentMatch === -1;
   const idx = isSeason ? 0 : currentMatch;
 
-  // Draw one radar. svgId: element id. rows: DATA.obv.ncc or .opp
-  function drawRadar(svgId, rows) {
-    const svg = document.getElementById(svgId);
-    if (!svg) return;
+  const nccRows = DATA.obv.ncc;
+  const oppRows = DATA.obv.opp;
+  const n = nccRows.length;                  // 5 axes
 
-    const W = 320, H = 260;
-    const cx = W / 2, cy = H / 2 + 10;   // centre, shifted down a touch for labels
-    const R = 90;                           // outer ring radius
-    const n = rows.length;                  // number of axes (5)
+  const W = 380, H = 300;
+  const cx = W / 2, cy = H / 2 + 8;
+  const R = 100;
 
-    // Per-axis min/max across all matches (season range) for scaling
-    const ranges = rows.map(row => {
-      const valid = (row.vals || []).filter(v => v !== null && v !== undefined);
-      if (!valid.length) return { min: 0, max: 1, avg: 0 };
-      const min = Math.min(...valid);
-      const max = Math.max(...valid);
-      const avg = valid.reduce((a, b) => a + b, 0) / valid.length;
-      return { min, max, avg };
-    });
+  // Per-axis range across BOTH NCC and Opp combined, so the two polygons
+  // sit on directly comparable scales.
+  const ranges = nccRows.map((row, i) => {
+    const oppRow = oppRows[i];
+    const combined = [...(row.vals || []), ...(oppRow ? oppRow.vals : [])]
+      .filter(v => v !== null && v !== undefined);
+    if (!combined.length) return { min: 0, max: 1, nccAvg: 0, oppAvg: 0 };
+    const min = Math.min(...combined);
+    const max = Math.max(...combined);
+    const nccValid = (row.vals || []).filter(v => v !== null && v !== undefined);
+    const oppValid = (oppRow ? oppRow.vals : []).filter(v => v !== null && v !== undefined);
+    const nccAvg = nccValid.length ? nccValid.reduce((a,b)=>a+b,0)/nccValid.length : 0;
+    const oppAvg = oppValid.length ? oppValid.reduce((a,b)=>a+b,0)/oppValid.length : 0;
+    return { min, max, nccAvg, oppAvg };
+  });
 
-    // Map a raw value to 0–1 on its axis. Pad the range slightly so points
-    // never sit exactly on the outer ring or at zero.
-    function scale(val, range) {
-      if (val === null || val === undefined) return 0;
-      const span = range.max - range.min;
-      if (span < 0.0001) return 0.5;
-      // Add 10% padding on each side
-      const lo = range.min - span * 0.1;
-      const hi = range.max + span * 0.1;
-      return Math.max(0, Math.min(1, (val - lo) / (hi - lo)));
-    }
-
-    // Angle for axis i (start at top = -π/2)
-    function angle(i) { return (2 * Math.PI * i / n) - Math.PI / 2; }
-
-    // Polar → cartesian
-    function polar(r, i) {
-      const a = angle(i);
-      return { x: cx + r * Math.cos(a), y: cy + r * Math.sin(a) };
-    }
-
-    // Build polygon points string from an array of 0-1 values
-    function polyPts(vals01) {
-      return vals01.map((v, i) => {
-        const p = polar(R * v, i);
-        return `${p.x.toFixed(2)},${p.y.toFixed(2)}`;
-      }).join(' ');
-    }
-
-    // Match values and season averages (both 0-1 scaled)
-    const matchVals01 = rows.map((row, i) => scale(
-      isSeason ? ranges[i].avg : (row.vals[idx] ?? null),
-      ranges[i]
-    ));
-    const avgVals01 = rows.map((row, i) => scale(ranges[i].avg, ranges[i]));
-
-    // Grid rings at 25%, 50%, 75%, 100%
-    const rings = [0.25, 0.5, 0.75, 1.0];
-    let html = '';
-
-    // Grid rings
-    rings.forEach(t => {
-      const pts = rows.map((_, i) => {
-        const p = polar(R * t, i);
-        return `${p.x.toFixed(2)},${p.y.toFixed(2)}`;
-      }).join(' ');
-      html += `<polygon points="${pts}" fill="none" stroke="#C8C4BB" stroke-width="${t === 1.0 ? 1.2 : 0.6}" stroke-dasharray="${t === 1.0 ? 'none' : '3,3'}"/>`;
-    });
-
-    // Spoke lines
-    rows.forEach((_, i) => {
-      const outer = polar(R, i);
-      html += `<line x1="${cx}" y1="${cy}" x2="${outer.x.toFixed(2)}" y2="${outer.y.toFixed(2)}" stroke="#C8C4BB" stroke-width="0.8"/>`;
-    });
-
-    // Season average polygon (navy, low opacity fill)
-    if (!isSeason) {
-      html += `<polygon points="${polyPts(avgVals01)}" fill="#13264B" fill-opacity="0.12" stroke="#13264B" stroke-width="1.5" stroke-opacity="0.4" stroke-linejoin="round"/>`;
-    }
-
-    // Match (or season avg when in season view) polygon (red)
-    html += `<polygon points="${polyPts(matchVals01)}" fill="#C8102E" fill-opacity="0.18" stroke="#C8102E" stroke-width="2" stroke-linejoin="round"/>`;
-
-    // Match dots
-    matchVals01.forEach((v, i) => {
+  function scale(val, range) {
+    if (val === null || val === undefined) return 0;
+    const span = range.max - range.min;
+    if (span < 0.0001) return 0.5;
+    const lo = range.min - span * 0.1;
+    const hi = range.max + span * 0.1;
+    return Math.max(0, Math.min(1, (val - lo) / (hi - lo)));
+  }
+  function angle(i) { return (2 * Math.PI * i / n) - Math.PI / 2; }
+  function polar(r, i) {
+    const a = angle(i);
+    return { x: cx + r * Math.cos(a), y: cy + r * Math.sin(a) };
+  }
+  function polyPts(vals01) {
+    return vals01.map((v, i) => {
       const p = polar(R * v, i);
-      html += `<circle cx="${p.x.toFixed(2)}" cy="${p.y.toFixed(2)}" r="3.5" fill="#C8102E" stroke="white" stroke-width="1.2"/>`;
-    });
-
-    // Axis labels — short names, positioned just beyond the outer ring.
-    // Raw value is placed on the OPPOSITE side of the label from the chart
-    // centre, offset perpendicularly so it never overlaps the axis text.
-    const labels = rows.map(r => r.label
-      .replace('Dribble & Carry OBV', 'Dribble & Carry')
-      .replace('Defensive Action OBV', 'Def. Action')
-      .replace('Opp. ', '')
-      .replace(' OBV', '')
-    );
-
-    const LABEL_PAD = 14;  // gap between outer ring and axis label centre
-
-    labels.forEach((lbl, i) => {
-      const a = angle(i);
-      const ax = Math.cos(a), ay = Math.sin(a); // unit vector along spoke
-
-      // Label anchor and position
-      let anchor = 'middle';
-      if (ax > 0.15) anchor = 'start';
-      else if (ax < -0.15) anchor = 'end';
-
-      const lx = cx + (R + LABEL_PAD) * ax;
-      const ly = cy + (R + LABEL_PAD) * ay;
-
-      html += `<text x="${lx.toFixed(2)}" y="${ly.toFixed(2)}"
-        text-anchor="${anchor}" dominant-baseline="middle"
-        font-size="9.5" font-family="Barlow Condensed, sans-serif"
-        font-weight="600" fill="#4A4A45">${lbl}</text>`;
-    });
-
-    // Centre label
-    const centreLabel = isSeason ? 'Season' : (MATCHES[idx] ? MATCHES[idx].opp.split(' ').slice(-1)[0] : '');
-    html += `<text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="middle"
-      font-size="9" font-family="Barlow Condensed, sans-serif" fill="#9A9890" font-style="italic">${centreLabel}</text>`;
-
-    svg.innerHTML = html;
+      return `${p.x.toFixed(2)},${p.y.toFixed(2)}`;
+    }).join(' ');
   }
 
-  drawRadar('obv-radar-ncc', DATA.obv.ncc);
-  drawRadar('obv-radar-opp', DATA.obv.opp);
+  const nccVals01 = nccRows.map((row, i) => scale(
+    isSeason ? ranges[i].nccAvg : (row.vals[idx] ?? null),
+    ranges[i]
+  ));
+  const oppVals01 = oppRows.map((row, i) => scale(
+    isSeason ? ranges[i].oppAvg : (row.vals[idx] ?? null),
+    ranges[i]
+  ));
+
+  let html = '';
+
+  // ── DIFFERENTIAL WEDGES ─────────────────────────────────────────────────
+  // For each axis, draw a wedge spanning half-way to each neighbouring axis.
+  // The wedge is filled with the leader's colour, and its radial extent
+  // matches the LEADER's value (red for NCC ahead, navy for Opp ahead).
+  // The trailing team's overlapping share is then over-painted in their
+  // colour up to their own value — what remains visible is the gap.
+  function wedgePath(i, r01) {
+    const aMid   = angle(i);
+    const aPrev  = angle((i - 1 + n) % n);
+    const aNext  = angle((i + 1) % n);
+    // Half-way angles to the neighbours
+    let aLeft  = (aPrev + aMid) / 2;
+    let aRight = (aMid + aNext) / 2;
+    // Handle wrap so the wedge stays a thin slice around aMid
+    function normalise(a, ref) {
+      while (a - ref >  Math.PI) a -= 2 * Math.PI;
+      while (a - ref < -Math.PI) a += 2 * Math.PI;
+      return a;
+    }
+    aLeft  = normalise(aLeft,  aMid);
+    aRight = normalise(aRight, aMid);
+    const r = R * r01;
+    const pL = { x: cx + r * Math.cos(aLeft),  y: cy + r * Math.sin(aLeft)  };
+    const pM = { x: cx + r * Math.cos(aMid),   y: cy + r * Math.sin(aMid)   };
+    const pR = { x: cx + r * Math.cos(aRight), y: cy + r * Math.sin(aRight) };
+    // Two straight-line triangles meeting at the centre — good enough at
+    // this size and avoids the headache of SVG arc flags.
+    return `M${cx},${cy} L${pL.x.toFixed(2)},${pL.y.toFixed(2)} L${pM.x.toFixed(2)},${pM.y.toFixed(2)} Z ` +
+           `M${cx},${cy} L${pM.x.toFixed(2)},${pM.y.toFixed(2)} L${pR.x.toFixed(2)},${pR.y.toFixed(2)} Z`;
+  }
+
+  // Differential per axis (scaled). Positive = NCC ahead, negative = Opp ahead.
+  const diffs01 = nccVals01.map((v, i) => v - oppVals01[i]);
+  const maxAbsDiff = Math.max(0.0001, ...diffs01.map(Math.abs));
+
+  for (let i = 0; i < n; i++) {
+    const leader   = diffs01[i] >= 0 ? nccVals01[i] : oppVals01[i];
+    const trailer  = diffs01[i] >= 0 ? oppVals01[i] : nccVals01[i];
+    const leaderColor = diffs01[i] >= 0 ? '#C8102E' : '#13264B';
+    // Opacity ramps from 0.10 (tiny gap) to 0.55 (largest gap on this chart)
+    const opacity = 0.10 + 0.45 * (Math.abs(diffs01[i]) / maxAbsDiff);
+    // Leader-coloured wedge out to the leader's value
+    html += `<path d="${wedgePath(i, leader)}" fill="${leaderColor}" fill-opacity="${opacity.toFixed(3)}" stroke="none"/>`;
+    // Carve out the trailing team's portion (paint over with white) — this
+    // leaves only the "gap" visible as the leader's colour
+    html += `<path d="${wedgePath(i, trailer)}" fill="#F5F2EB" fill-opacity="0.95" stroke="none"/>`;
+  }
+
+  // Grid rings at 25%, 50%, 75%, 100% (drawn over wedges so structure stays readable)
+  [0.25, 0.5, 0.75, 1.0].forEach(t => {
+    const pts = nccRows.map((_, i) => {
+      const p = polar(R * t, i);
+      return `${p.x.toFixed(2)},${p.y.toFixed(2)}`;
+    }).join(' ');
+    html += `<polygon points="${pts}" fill="none" stroke="#C8C4BB" stroke-width="${t === 1.0 ? 1.2 : 0.6}" stroke-dasharray="${t === 1.0 ? 'none' : '3,3'}"/>`;
+  });
+
+  // Spokes
+  nccRows.forEach((_, i) => {
+    const outer = polar(R, i);
+    html += `<line x1="${cx}" y1="${cy}" x2="${outer.x.toFixed(2)}" y2="${outer.y.toFixed(2)}" stroke="#C8C4BB" stroke-width="0.8"/>`;
+  });
+
+  // Opposition polygon outline (no fill — fill is now the wedges)
+  html += `<polygon points="${polyPts(oppVals01)}" fill="none" stroke="#13264B" stroke-width="2" stroke-opacity="0.9" stroke-linejoin="round"/>`;
+  oppVals01.forEach((v, i) => {
+    const p = polar(R * v, i);
+    html += `<circle cx="${p.x.toFixed(2)}" cy="${p.y.toFixed(2)}" r="3.2" fill="#13264B" stroke="white" stroke-width="1.2"/>`;
+  });
+
+  // NCC polygon outline
+  html += `<polygon points="${polyPts(nccVals01)}" fill="none" stroke="#C8102E" stroke-width="2.2" stroke-linejoin="round"/>`;
+  nccVals01.forEach((v, i) => {
+    const p = polar(R * v, i);
+    html += `<circle cx="${p.x.toFixed(2)}" cy="${p.y.toFixed(2)}" r="3.5" fill="#C8102E" stroke="white" stroke-width="1.2"/>`;
+  });
+
+  // Axis labels — short names from the NCC row (Opp uses same metric set)
+  const labels = nccRows.map(r => r.label
+    .replace('Dribble & Carry OBV', 'Dribble & Carry')
+    .replace('Defensive Action OBV', 'Def. Action')
+    .replace(' OBV', '')
+  );
+
+  // Raw-value differential per axis (in original OBV units, not scaled)
+  function rawDiff(i) {
+    if (isSeason) return ranges[i].nccAvg - ranges[i].oppAvg;
+    const nv = nccRows[i].vals[idx], ov = oppRows[i].vals[idx];
+    if (nv === null || nv === undefined || ov === null || ov === undefined) return null;
+    return nv - ov;
+  }
+
+  const LABEL_PAD = 16;
+  labels.forEach((lbl, i) => {
+    const a = angle(i);
+    const ax = Math.cos(a), ay = Math.sin(a);
+    let anchor = 'middle';
+    if (ax > 0.15) anchor = 'start';
+    else if (ax < -0.15) anchor = 'end';
+    const lx = cx + (R + LABEL_PAD) * ax;
+    const ly = cy + (R + LABEL_PAD) * ay;
+    html += `<text x="${lx.toFixed(2)}" y="${ly.toFixed(2)}"
+      text-anchor="${anchor}" dominant-baseline="middle"
+      font-size="10" font-family="Barlow Condensed, sans-serif"
+      font-weight="600" fill="#4A4A45">${lbl}</text>`;
+
+    // Differential chip just below the axis label
+    const d = rawDiff(i);
+    if (d !== null) {
+      const sign = d >= 0 ? '+' : '−';
+      const fill = d >= 0 ? '#C8102E' : '#13264B';
+      const dy = ly + 12;
+      html += `<text x="${lx.toFixed(2)}" y="${dy.toFixed(2)}"
+        text-anchor="${anchor}" dominant-baseline="middle"
+        font-size="9" font-family="Barlow Condensed, sans-serif"
+        font-weight="700" fill="${fill}">${sign}${Math.abs(d).toFixed(3)}</text>`;
+    }
+  });
+
+  // Centre label
+  const centreLabel = isSeason
+    ? 'Season Avg'
+    : (MATCHES[idx] ? `vs ${MATCHES[idx].opp.split(' ').slice(-1)[0]}` : '');
+  html += `<text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="middle"
+    font-size="9.5" font-family="Barlow Condensed, sans-serif" fill="#9A9890" font-style="italic">${centreLabel}</text>`;
+
+  svg.innerHTML = html;
+}
+
+// ── OBV HEAD-TO-HEAD TABLE (NCC | Metric | Opp) ──────────────────────────────
+function renderOBVH2HTable() {
+  const tbody = document.getElementById('obv-h2h-rows');
+  if (!tbody) return;
+
+  const isSeason = currentMatch === -1;
+  const idx = isSeason ? 0 : currentMatch;
+  const nccRows = DATA.obv.ncc;
+  const oppRows = DATA.obv.opp;
+
+  // Short metric name shown in the centre column (no "OBV" suffix needed)
+  function shortLabel(label) {
+    return label
+      .replace('Opp. ', '')
+      .replace('Dribble & Carry OBV', 'Dribble & Carry')
+      .replace('Defensive Action OBV', 'Def. Action')
+      .replace(' OBV', '');
+  }
+
+  // Render value + grade cells for a single side of one metric row.
+  function sideCells(row, side) {
+    const val     = isSeason ? null : row.vals[idx];
+    const display = fmt(val, row);
+    const grade   = val !== null ? getGrade(val, row) : null;
+
+    const valCell = display !== null
+      ? `<td class="h2h-val ${side}">${display}</td>`
+      : `<td class="h2h-val ${side} empty">—</td>`;
+
+    const gradeCell = (val !== null && grade)
+      ? `<td class="h2h-grade">${gradeHTML(grade)}</td>`
+      : `<td class="h2h-grade"><span style="color:var(--text-muted);font-size:11px;">—</span></td>`;
+
+    return { valCell, gradeCell };
+  }
+
+  tbody.innerHTML = nccRows.map((ncc, i) => {
+    const opp = oppRows[i];
+    const nccC = sideCells(ncc, 'ncc');
+    const oppC = sideCells(opp, 'opp');
+
+    // Column order (left → right):
+    //   NCC Grade | NCC Value | Metric | Opp Value | Opp Grade
+    return `<tr>
+      ${nccC.gradeCell}
+      ${nccC.valCell}
+      <td class="h2h-metric">${shortLabel(ncc.label)}</td>
+      ${oppC.valCell}
+      ${oppC.gradeCell}
+    </tr>`;
+  }).join('');
 }
 
 function renderAll() {
@@ -3065,8 +3179,8 @@ function renderAll() {
     ['def-volume-rows',       DATA.defint.volume],
     ['def-forward-rows',      DATA.defint.forward],
     ['def-progallowed-rows',  DATA.defint.progallowed],
-    ['obv-ncc-rows',          DATA.obv.ncc],
-    ['obv-opp-rows',          DATA.obv.opp],
+    // NOTE: OBV no longer has separate NCC / Opp tables — it's rendered
+    // as a single head-to-head table by renderOBVH2HTable() below.
   ];
 
   sections.forEach(([tbodyId, rows]) => {
@@ -3077,6 +3191,7 @@ function renderAll() {
 
   document.getElementById('seasonSummary').style.display = isSeason ? 'grid' : 'none';
   renderOBVRadars();
+  renderOBVH2HTable();
   renderBypassSegments();
 }
 
@@ -3116,7 +3231,7 @@ function selectSubtab(name, el) {
   const target = document.getElementById(tabMap[name]);
   if (target) target.classList.add('active');
   if (name === 'match-insights') renderMatchInsights(currentMatch);
-  if (name === 'obv') renderOBVRadars();
+  if (name === 'obv') { renderOBVRadars(); renderOBVH2HTable(); }
 }
 
 function buildMatchPills() {
@@ -3154,7 +3269,8 @@ const MATCH_REPORT_DATA = [
   { ncc_goals:1, opp_goals:2, result:'L', ncc_xg:1.935, opp_xg:2.176, ncc_xg_sp:0.167, opp_xg_sp:0.184, ncc_shots:16, opp_shots:11, ncc_sot:3, opp_sot:2, ncc_poss:58, opp_poss:42, ncc_pass_pct:78, opp_pass_pct:76, ncc_pressures:93, opp_pressures:106, ncc_press_regains:37, opp_press_regains:33, top_shooters:null, top_kp:null, note:'Season low in pressures (93). KC had season-high opp xG (2.18). Low press intensity linked to defensive exposure.' },
   { ncc_goals:0, opp_goals:1, result:'L', ncc_xg:0.78, opp_xg:0.445, ncc_xg_sp:0.231, opp_xg_sp:0.198, ncc_shots:12, opp_shots:9, ncc_sot:1, opp_sot:2, ncc_poss:57, opp_poss:43, ncc_pass_pct:82, opp_pass_pct:77, ncc_pressures:115, opp_pressures:154, ncc_press_regains:37, opp_press_regains:29, top_shooters:null, top_kp:null, note:'Lost despite leading on xG (0.78 vs 0.45) and possession (57%). Orlando converted their only quality chance — we were clinical in neither box.' },
   { ncc_goals:4, opp_goals:0, result:'W', ncc_xg:2.217, opp_xg:0.944, ncc_xg_sp:0.409, opp_xg_sp:0.302, ncc_shots:17, opp_shots:13, ncc_sot:null, opp_sot:null, ncc_poss:52, opp_poss:48, ncc_pass_pct:81, opp_pass_pct:79, ncc_pressures:134, opp_pressures:129, ncc_press_regains:null, opp_press_regains:null, top_shooters:null, top_kp:null, note:null },
-  { ncc_goals:2, opp_goals:1, result:'W', ncc_xg:1.234, opp_xg:1.29, ncc_xg_sp:0.114, opp_xg_sp:0.597, ncc_shots:11, opp_shots:17, ncc_sot:4, opp_sot:2, ncc_poss:53, opp_poss:47, ncc_pass_pct:79, opp_pass_pct:74, ncc_pressures:158, opp_pressures:185, ncc_press_regains:44, opp_press_regains:48, top_shooters:'Ashley Nicole Sanchez (4 shots, 0.45xG), Shinomi Koyama (2, 0.09xG), Felicitas Rauch (2, 0.11xG)', top_kp:'Ryan Williams (2 KP, 0.67xG), Allyson Schlegel (2 KP, 0.11xG)', note:'W 2-1 away at Louisville. Won despite lower xG (1.23 vs 1.29) — clinical finishing from ANS. Louisville\'s corner volume generated 0.60 SP xG but NCC held firm defensively.' }
+  { ncc_goals:2, opp_goals:1, result:'W', ncc_xg:1.234, opp_xg:1.29, ncc_xg_sp:0.114, opp_xg_sp:0.597, ncc_shots:11, opp_shots:17, ncc_sot:4, opp_sot:2, ncc_poss:53, opp_poss:47, ncc_pass_pct:79, opp_pass_pct:74, ncc_pressures:158, opp_pressures:185, ncc_press_regains:44, opp_press_regains:48, top_shooters:'Ashley Nicole Sanchez (4 shots, 0.45xG), Shinomi Koyama (2, 0.09xG), Felicitas Rauch (2, 0.11xG)', top_kp:'Ryan Williams (2 KP, 0.67xG), Allyson Schlegel (2 KP, 0.11xG)', note:'W 2-1 away at Louisville. Won despite lower xG (1.23 vs 1.29) — clinical finishing from ANS. Louisville\'s corner volume generated 0.60 SP xG but NCC held firm defensively.' },
+  { ncc_goals:2, opp_goals:1, result:'W', ncc_xg:1.283, opp_xg:1.604, ncc_xg_sp:0.19, opp_xg_sp:0.451, ncc_shots:10, opp_shots:17, ncc_sot:null, opp_sot:null, ncc_poss:48, opp_poss:52, ncc_pass_pct:75, opp_pass_pct:78, ncc_pressures:100, opp_pressures:94, ncc_press_regains:null, opp_press_regains:null, top_shooters:null, top_kp:null, note:null }
 ];
 
 // =====================================================================
@@ -3173,7 +3289,8 @@ const BYPASS_SEGMENTS = [
   { ncc:[38,78,48,52,60,101], opp:[51,63,75,58,58,39] },
   { ncc:[62,45,57,80,34,57], opp:[22,48,49,49,66,42] },
   { ncc:[67,57,108,66,79,79], opp:[73,37,59,56,51,36] },
-  { ncc:[62,55,122,64,47,67], opp:[60,23,83,52,38,80] }
+  { ncc:[62,55,122,64,47,67], opp:[60,23,83,52,38,80] },
+  { ncc:[50,32,82,68,41,61], opp:[39,45,53,35,53,70] }
 ];
 
 function renderBypassSegments() {
@@ -3621,11 +3738,25 @@ function renderInsights() {
   }
   const pressVals   = DATA.defint.volume.find(r=>r.id==='pressures').vals;
   const pressXGcorr = pearson(pressVals, oppXG.vals);
-  const nccBEA = DATA.boxdom.penetration.find(r=>r.id==='bea');
-  const nccSBE = DATA.boxdom.penetration.find(r=>r.id==='sbe');
+  // 'bea' (Box Entries Attempted) and 'opp_bea' were removed from DATA;
+  // derive an aggregate from the remaining Cross&Pass + Carry attempts when
+  // present so the entries success-rate calc still has something to chew on.
+  function sumRows(section, ids) {
+    const rows = ids.map(id => section.find(r=>r.id===id)).filter(Boolean);
+    if (!rows.length) return null;
+    const n = rows[0].vals.length;
+    return { vals: Array.from({length:n}, (_,i) =>
+      rows.reduce((sum,r) => sum + (r.vals[i] || 0), 0)) };
+  }
+  const nccBEA = DATA.boxdom.penetration.find(r=>r.id==='bea')
+              || sumRows(DATA.boxdom.penetration, ['bea_cp','bea_carry'])
+              || { vals: [] };
+  const nccSBE = DATA.boxdom.penetration.find(r=>r.id==='sbe') || { vals: [] };
   const beSucRate = avg(nccBEA.vals.map((v,i)=>v&&nccSBE.vals[i]!==null?nccSBE.vals[i]/v:null));
-  const oppBEA = DATA.boxres.denying.find(r=>r.id==='opp_bea');
-  const oppSBE = DATA.boxres.denying.find(r=>r.id==='opp_sbe');
+  const oppBEA = DATA.boxres.denying.find(r=>r.id==='opp_bea')
+              || sumRows(DATA.boxres.denying, ['opp_bea_cp','opp_bea_carry'])
+              || { vals: [] };
+  const oppSBE = DATA.boxres.denying.find(r=>r.id==='opp_sbe') || { vals: [] };
   const oppBeSucRate = avg(oppBEA.vals.map((v,i)=>v&&oppSBE.vals[i]!==null?oppSBE.vals[i]/v:null));
 
   // ===================== BUILD HTML =====================
@@ -4077,7 +4208,8 @@ const MATCH_INFO = [
   { label: 'GW6 · M7', date: 'May 2, 2026', opp: 'KC Current', loc: 'Home', result: 'L 1–2' },
   { label: 'GW7 · M8', date: 'May 8, 2026', opp: 'Orlando Pride', loc: 'Away', result: 'L 0–1' },
   { label: 'GW8 · M9', date: 'May 16, 2026', opp: 'Chicago Red Stars', loc: 'Home', result: 'W 4–0' },
-  { label: 'GW9 · M10', date: 'May 24, 2026', opp: 'Racing Louisville FC', loc: 'Away', result: 'W 2–1' }
+  { label: 'GW9 · M10', date: 'May 24, 2026', opp: 'Racing Louisville FC', loc: 'Away', result: 'W 2–1' },
+  { label: 'GW10 · M11', date: 'May 31, 2026', opp: 'Angel City', loc: 'Away', result: 'W 2–1' }
 ];
 
 const SECTION_LABELS = {
